@@ -69,24 +69,28 @@ def get_image_stats(data, li, lj):
     return mean, math.sqrt(variance)
 
 
-def get_histogram(data, grayscale):
+def get_histogram(data, grayscale, plot_option=False):
     histogram = np.zeros(grayscale+1, dtype=int)
     for row in data:
         for col in row:
             histogram[col] += 1
-    plt.bar(range(grayscale+1), histogram)
-    plt.show()
+    if plot_option:
+        plt.bar(range(grayscale+1), histogram)
+        plt.show()
+    return histogram
 
 
-def get_cumulative_histogram(data, grayscale):
+def get_cumulative_histogram(data, grayscale, plot_option=False):
     response = np.zeros(grayscale+1, dtype=int)
     for row in data:
         for col in row:
             response[col] += 1
     for index in range(1, grayscale+1):
         response[index] += response[index-1]
-    plt.bar(range(grayscale + 1), response)
-    plt.show()
+    if plot_option:
+        plt.bar(range(grayscale + 1), response)
+        plt.show()
+    return response
 
 
 if __name__ == '__main__':
@@ -97,6 +101,6 @@ if __name__ == '__main__':
     # get the mean and standard div
     get_image_stats(data, li, lj)
     # get the histogram
-    get_histogram(data, gray_scale)
+    get_histogram(data, gray_scale, plot_option=True)
     # get the cumulative histogram
-    get_cumulative_histogram(data, gray_scale)
+    get_cumulative_histogram(data, gray_scale, plot_option=True)
