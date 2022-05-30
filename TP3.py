@@ -37,6 +37,8 @@ def filter_image(matrix, height, width, max_grayscale, applied_filter, filter_si
                     response[i*width+j] = convolution_three_by_three(element, applied_filter) \
                         if convolution_three_by_three(element, applied_filter) > 0 else 0
     response = response.reshape(height, width)
+    plt.imshow(Image.fromarray(response))
+    plt.show()
     if save_option:
         write_pgm('convolution-image', response, max_grayscale, height, width)
     return response
@@ -70,28 +72,43 @@ def median_filter_image(matrix, height, width, max_grayscale, filter_size, save_
     return response
 
 
+# definition of the low pass filter mean of size 3X3
+low_pass_filter_three = (1/9) * np.ones(9).reshape(3, 3)
+
+# definition of the low pass filter mean of size 5X5
+low_pass_filter_five = (1/25) * np.ones(25).reshape(5, 5)
+
+# definition of the low pass filter mean of size 7X7
+low_pass_filter_seven = (1/9) * np.ones(49).reshape(7, 7)
+
+# definition of high pass filter of size 3X3
+high_pass_filter_v1 = np.array([0, -1, 0, -1, 5, -1, 0, -1, 0]).reshape(3, 3)
+
+# definition of high pass filter of size 3X3
+high_pass_filter_v2 = np.array([0, -1, 0, -1, 5, -1, 0, -1, 0]).reshape(3, 3)
+
+# definition of high pass filter of size 3X3
+high_pass_filter_v3 = np.array([0, -1, 0, -1, 5, -1, 0, -1, 0]).reshape(3, 3)
+
+
 if __name__ == '__main__':
+
     li, lj, gray_scale, data = read_pgm('./assets/equalized-image.pgm')
     distorted_image = distort_image(data, li, lj, gray_scale)
     # plot the distorted image
-    # plt.imshow(Image.fromarray(distorted_image))
-    # plt.show()
+    plt.imshow(Image.fromarray(distorted_image))
+    plt.show()
 
-    # definition of the low pass filter mean of size 3X3
-    # low_pass_filter = (1/9) * np.array([1, 1, 1, 1, 1, 1, 1, 1, 1]).reshape(3,3)
-
-    # definition of high pass filter of size 3X3
-    # high_pass_filter = np.array([0, -1, 0, -1, 5, -1, 0, -1, 0]).reshape(3, 3)
-
-    # filtered_low = filter_image(distorted_image, li, lj, gray_scale, low_pass_filter, 3)
+    filtered_low = filter_image(distorted_image, li, lj, gray_scale, low_pass_filter_three, 3)
     # plot low filtered image
-    # plt.imshow(Image.fromarray(filtered_low))
-    # plt.show()
+    plt.imshow(Image.fromarray(filtered_low))
+    plt.show()
 
-    # filtered_high = filter_image(distorted_image, li, lj, gray_scale, high_pass_filter, 3)
+    filtered_high = filter_image(distorted_image, li, lj, gray_scale, high_pass_filter_v1, 3)
     # plot high filtered image
-    # plt.imshow(Image.fromarray(filtered_high))
-    # plt.show()
+    plt.imshow(Image.fromarray(filtered_high))
+    plt.show()
+
     median_filtered_image = median_filter_image(distorted_image, li, lj, gray_scale, 3)
     plt.imshow(Image.fromarray(median_filtered_image))
     plt.show()

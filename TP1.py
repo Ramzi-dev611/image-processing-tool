@@ -1,6 +1,6 @@
 import math
 import matplotlib.pyplot as plt
-
+from PIL import Image
 import numpy as np
 
 
@@ -43,6 +43,8 @@ def get_image_content_type_2(file):
     for line in without_comments[2:]:
         content.extend([int(c) for c in line.split()])
     data = create_matrix_from_list(li, lj, content)
+    plt.imshow(Image.fromarray(data))
+    plt.show()
     return li, lj, gray_scale, data
 
 

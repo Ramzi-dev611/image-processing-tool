@@ -1,5 +1,5 @@
 import math
-
+from PIL import Image
 from TP1 import read_pgm, write_pgm, get_histogram, get_cumulative_histogram
 import numpy as np
 import matplotlib.pyplot as plt
@@ -14,6 +14,11 @@ def equalize_histogram(matrix, height, width, maximum_grayscale, plot_option=Fal
         for j in range(width):
             new_data[i*width+j] = grayscale_mapping[data[i][j]]
     new_data = new_data.reshape(height, width)
+
+    # plt equalized image
+    plt.imshow(Image.fromarray(new_data))
+    plt.show()
+
     if plot_option:
         new_histogram = get_histogram(new_data, maximum_grayscale)
         plt.bar(range(maximum_grayscale+1), new_histogram)
@@ -35,6 +40,11 @@ def histogram_linear_transformation(matrix, level0, level1, maximum_grayscale, p
             else:
                 response[width*i+j] += maximum_grayscale * (col-level0) /(level1 - level0)
     response = response.reshape(height, width)
+
+    # plt transformed image
+    plt.imshow(Image.fromarray(response))
+    plt.show()
+
     if plot_option:
         histogram = get_histogram(response, grayscale=maximum_grayscale)
         plt.bar(range(maximum_grayscale+1), histogram)
@@ -46,5 +56,5 @@ def histogram_linear_transformation(matrix, level0, level1, maximum_grayscale, p
 
 if __name__ == "__main__":
     li, lj, gray_scale, data = read_pgm('assets/balloons-P2.pgm')
-    equalize_histogram(data, li, lj, gray_scale, plot_option=True)
+    # equalize_histogram(data, li, lj, gray_scale, plot_option=True)
     histogram_linear_transformation(data, 50, 150, gray_scale, plot_option=True)
